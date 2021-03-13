@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import {
   View,
   Animated,
@@ -67,24 +67,23 @@ const MediaControls = (props: Props) => {
   const [opacity] = useState(new Animated.Value(initialOpacity));
   const [isVisible, setIsVisible] = useState(initialIsVisible);
 
-  useEffect(() => {
-    fadeOutControls(fadeOutDelay);
-  }, []);
-
-  const fadeOutControls = (delay = 0) => {
-    Animated.timing(opacity, {
-      toValue: 0,
-      duration: 300,
-      delay,
-      useNativeDriver: false,
-    }).start(result => {
-      /* I noticed that the callback is called twice, when it is invoked and when it completely finished
+  const fadeOutControls = useCallback(
+    (delay = 0) => {
+      Animated.timing(opacity, {
+        toValue: 0,
+        duration: 300,
+        delay,
+        useNativeDriver: false,
+      }).start(result => {
+        /* I noticed that the callback is called twice, when it is invoked and when it completely finished
       This prevents some flickering */
-      if (result.finished) {
-        setIsVisible(false);
-      }
-    });
-  };
+        if (result.finished) {
+          setIsVisible(false);
+        }
+      });
+    },
+    [opacity],
+  );
 
   const fadeInControls = (loop = true) => {
     setIsVisible(true);
@@ -135,6 +134,10 @@ const MediaControls = (props: Props) => {
       return value ? fadeOutControls() : fadeInControls();
     });
   };
+
+  useEffect(() => {
+    fadeOutControls(fadeOutDelay);
+  }, [fadeOutControls, fadeOutDelay]);
 
   return (
     <TouchableWithoutFeedback accessible={false} onPress={toggleControls}>
