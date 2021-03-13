@@ -5,6 +5,8 @@ import {
   TouchableWithoutFeedback,
   GestureResponderEvent,
   ViewStyle,
+  ImageStyle,
+  StyleProp,
 } from "react-native";
 import styles from "./MediaControls.style";
 import { PLAYER_STATES } from "./constants/playerStates";
@@ -30,6 +32,11 @@ export type Props = {
   showOnStart?: boolean;
   sliderStyle?: CustomSliderStyle;
   toolbarStyle?: ViewStyle;
+  getPlayerStateIcon?: (playerState: PLAYER_STATES) => any;
+  renderPlayButton?: (playerState: PLAYER_STATES) => JSX.Element;
+  playButtonStyle?: StyleProp<ImageStyle>;
+  playButtonInnerContainerStyle?: StyleProp<ViewStyle>;
+  playButtonContainerStyle?: StyleProp<ViewStyle>;
 };
 
 const MediaControls = (props: Props) => {
@@ -49,6 +56,11 @@ const MediaControls = (props: Props) => {
     showOnStart = true,
     sliderStyle, // defaults are applied in Slider.tsx
     toolbarStyle: customToolbarStyle = {},
+    getPlayerStateIcon,
+    renderPlayButton,
+    playButtonStyle,
+    playButtonContainerStyle,
+    playButtonInnerContainerStyle,
   } = props;
   const { initialOpacity, initialIsVisible } = (() => {
     if (showOnStart) {
@@ -161,6 +173,11 @@ const MediaControls = (props: Props) => {
               isLoading={isLoading}
               mainColor={mainColor}
               playerState={playerState}
+              containerStyle={playButtonContainerStyle}
+              getPlayerStateIcon={getPlayerStateIcon}
+              playButtonContainerStyle={playButtonInnerContainerStyle}
+              playButtonStyle={playButtonStyle}
+              renderPlayButton={renderPlayButton}
             />
             <Slider
               progress={progress}
