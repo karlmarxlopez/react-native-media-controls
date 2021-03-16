@@ -37,6 +37,7 @@ export type Props = {
   playButtonStyle?: StyleProp<ImageStyle>;
   playButtonInnerContainerStyle?: StyleProp<ViewStyle>;
   playButtonContainerStyle?: StyleProp<ViewStyle>;
+  renderCloseButton?: () => JSX.Element;
 };
 
 const MediaControls = (props: Props) => {
@@ -61,6 +62,7 @@ const MediaControls = (props: Props) => {
     playButtonStyle,
     playButtonContainerStyle,
     playButtonInnerContainerStyle,
+    renderCloseButton,
   } = props;
   const { initialOpacity, initialIsVisible } = (() => {
     if (showOnStart) {
@@ -190,6 +192,7 @@ const MediaControls = (props: Props) => {
               onPause={onPause}
               customSliderStyle={sliderStyle}
             />
+            {renderCloseButton ? renderCloseButton() : null}
           </View>
         )}
       </Animated.View>
