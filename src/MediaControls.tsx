@@ -38,7 +38,12 @@ export type Props = {
   playButtonInnerContainerStyle?: StyleProp<ViewStyle>;
   playButtonContainerStyle?: StyleProp<ViewStyle>;
   renderCloseButton?: () => JSX.Element;
+  fadeInDuration?: number;
+  fadeOutDuration?: number;
 };
+
+const DEFAULT_FADE_IN_DURATION = 300;
+const DEFAULT_FADE_OUT_DURATION = 300;
 
 const MediaControls = (props: Props) => {
   const {
@@ -63,6 +68,8 @@ const MediaControls = (props: Props) => {
     playButtonContainerStyle,
     playButtonInnerContainerStyle,
     renderCloseButton,
+    fadeInDuration = DEFAULT_FADE_IN_DURATION,
+    fadeOutDuration = DEFAULT_FADE_OUT_DURATION,
   } = props;
   const { initialOpacity, initialIsVisible } = (() => {
     if (showOnStart) {
@@ -85,7 +92,7 @@ const MediaControls = (props: Props) => {
     (delay = 0) => {
       Animated.timing(opacity, {
         toValue: 0,
-        duration: 300,
+        duration: fadeOutDuration,
         delay,
         useNativeDriver: false,
       }).start(result => {
@@ -96,14 +103,14 @@ const MediaControls = (props: Props) => {
         }
       });
     },
-    [opacity],
+    [opacity, fadeOutDuration],
   );
 
   const fadeInControls = (loop = true) => {
     setIsVisible(true);
     Animated.timing(opacity, {
       toValue: 1,
-      duration: 300,
+      duration: fadeInDuration,
       delay: 0,
       useNativeDriver: false,
     }).start(() => {

@@ -72,6 +72,7 @@ const Slider = (props: Props) => {
           </Text>
         </View>
         <RNSlider
+          animateTransitions
           style={[styles.progressSlider]}
           onValueChange={dragging}
           onSlidingComplete={seekVideo}
